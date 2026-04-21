@@ -26,6 +26,16 @@ function login(){
   firebase.auth().signInWithEmailAndPassword(email.value, pass.value)
   .then(()=> location="app.html");
 }
+
+  function signup(){
+  firebase.auth().createUserWithEmailAndPassword(email.value, pass.value)
+  .then(()=>{
+    alert("Account Created! Now login");
+  })
+  .catch(e=>{
+    alert(e.message);
+  });
+}
 </script>
 
 </body>
