@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>App</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h2>Services</h2>
+
+<button onclick="book('Mobile Recharge')">Mobile Recharge</button>
+<button onclick="book('Print')">Print</button>
+
+<div id="paymentBox" style="display:none;">
+  <h3>Scan & Pay</h3>
+  <img src="paytm-qr.png" width="200">
+
+  <input type="file" id="paymentProof">
+  <button onclick="uploadAndConfirm()">Upload & Confirm</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
