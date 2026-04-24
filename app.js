@@ -159,3 +159,70 @@ db.collection("bookings").add({
   status: "Pending",
   time: new Date()
 });
+function handleServiceChange(){
+
+  let service = document.getElementById("service").value;
+
+  if(service === "Electricity Bill"){
+    document.getElementById("ebillBox").style.display = "block";
+  } else {
+    document.getElementById("ebillBox").style.display = "none";
+  }
+
+  calculateBill();
+}
+  function calculateBill(){
+
+  let service = document.getElementById("service").value;
+  let total = 0;
+
+  // ✅ Electricity bill logic
+  if(service === "Electricity Bill"){
+
+    let bill = parseInt(document.getElementById("ebillAmount").value) || 0;
+
+    total = bill + 30; // ₹30 service charge
+
+  } else {
+
+    let qty = parseInt(document.getElementById("qty").value) || 1;
+    let price = priceList[service] || 0;
+
+    if(service === "Print B/W" || service === "Print Color"){
+      total = price * qty;
+    } else {
+      total = price;
+    }
+
+  }
+
+  document.getElementById("total").innerText = total;
+}
+  let service = document.getElementById("service").value;
+let amount = document.getElementById("total").innerText;
+
+let ebill = "";
+
+if(service === "Electricity Bill"){
+  ebill = document.getElementById("ebillAmount").value;
+}
+
+db.collection("bookings").add({
+  orderId: orderId,
+  phone: phone,
+  service: service,
+  ebillAmount: ebill,
+  amount: amount,
+  screenshot: url,
+  status: "Pending",
+  time: new Date()
+});
+  Service: ${d.service}<br>
+
+${d.ebillAmount ? "Bill: ₹" + d.ebillAmount + "<br>" : ""}
+
+Amount: ₹ ${d.amount}<br>
+  if(service === "DTH Recharge"){
+  let amt = parseInt(document.getElementById("customAmount").value) || 0;
+  total = amt + 20; // service charge
+}
