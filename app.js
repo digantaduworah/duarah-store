@@ -107,3 +107,11 @@ function track(){
   });
 
 }
+let last = 0;
+
+db.collection("bookings").onSnapshot(snap=>{
+  if(snap.size > last){
+    document.getElementById("sound").play();
+  }
+  last = snap.size;
+});
