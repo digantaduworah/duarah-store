@@ -3,3 +3,11 @@ if (localStorage.getItem("admin") !== "true") {
   window.location.href = "login.html";
 }
 </script>
+<button onclick="logout()">Logout</button>
+
+<script>
+function logout() {
+  localStorage.removeItem("admin");
+  window.location.href = "login.html";
+}
+</script>
