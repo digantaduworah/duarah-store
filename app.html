@@ -2,3 +2,19 @@
   <option value="en">English</option>
   <option value="as">Assamese</option>
 </select>
+<div class="card">
+
+<h3>Select Category</h3>
+
+<select id="category" onchange="loadServices()">
+  <option value="">Select</option>
+  <option>Online Apply</option>
+  <option>Recharge</option>
+  <option>Print</option>
+</select>
+
+<select id="service" onchange="loadSubService()"></select>
+
+<select id="subService" onchange="handleService()"></select>
+
+</div>
