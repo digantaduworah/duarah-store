@@ -63,7 +63,30 @@ function handleServiceChange() {
   if (service === "Electricity Bill") {
     document.getElementById("ebillBox").style.display = "block";
   }
+function calculateBill() {
+  let service = document.getElementById("service").value;
+  let total = 0;
 
+  if (service === "Print B/W") {
+    let qty = document.getElementById("qty").value || 1;
+    total = qty * 5; // ₹5 per page
+  }
+
+  else if (service === "Print Color") {
+    let qty = document.getElementById("qty").value || 1;
+    total = qty * 10; // ₹10 per page
+  }
+
+  else if (service === "Electricity Bill") {
+    total = parseInt(document.getElementById("ebillAmount").value || 0);
+  }
+
+  else if (service === "PAN Card") {
+    total = 100;
+  }
+
+  document.getElementById("total").innerText = total;
+}
   calculateBill();
 }
   // Show electricity dropdown
@@ -78,8 +101,10 @@ function handleServiceChange() {
 
 // 💰 Price list
 const priceList = {
-  "Print B/W": 5,
+  "Print B/W": 10,
   "Print Color": 10,
+   "Xerox B/W": 5,
+ "Xerox Color": 10,
   "Scan": 5,
   "PAN Card": 300,
   "Voter Card": 200
