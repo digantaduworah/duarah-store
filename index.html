@@ -1,45 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Duarah Store</title>
-
-  <style>
-    body{
-      font-family: Arial;
-      background:#f5f7fb;
-      text-align:center;
-      padding:30px;
-    }
-    .card{
-      background:white;
-      padding:20px;
-      border-radius:12px;
-      max-width:300px;
-      margin:auto;
-      box-shadow:0 5px 15px rgba(0,0,0,0.1);
-    }
-    button{
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      border:none;
-      border-radius:8px;
-      background:#007bff;
-      color:white;
-      font-size:16px;
-    }
-  </style>
+  <title>CSC Billing System</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="card">
-  <h2>Welcome to Duarah Store</h2>
+  <h2>CSC Billing System</h2>
 
-  <a href="app.html"><button>📦 Place Order</button></a>
-  <a href="app.html#track"><button>🔍 Track Order</button></a>
-  <a href="admin.html"><button>🛠 Admin Panel</button></a>
+  <input id="phone" placeholder="Phone Number">
+
+  <select id="service" onchange="handleServiceChange()">
+    <option value="">Select Service</option>
+    <option value="bw">Print B/W</option>
+    <option value="color">Print Color</option>
+    <option value="ebill">Electricity Bill</option>
+    <option value="pan">PAN Card</option>
+  </select>
+
+  <!-- Quantity -->
+  <div id="qtyBox" style="display:none;">
+    <input type="number" id="qty" value="1" oninput="calculateBill()">
+  </div>
+
+  <!-- Electricity -->
+  <div id="ebillBox" style="display:none;">
+    <select id="ebillAmount" onchange="calculateBill()">
+      <option value="100">₹100</option>
+      <option value="200">₹200</option>
+      <option value="300">₹300</option>
+    </select>
+  </div>
+
+  <h3>Total: ₹ <span id="total">0</span></h3>
+
+  <button onclick="showQR()">Pay Now</button>
+
+  <div id="qrBox" style="display:none;">
+    <p>Scan & Pay</p>
+    <img src="paytm-qr.png" width="200">
+    <button onclick="submitOrder()">I Paid</button>
+  </div>
 </div>
+
+<div class="card">
+  <h2>Track Order</h2>
+  <input id="trackPhone" placeholder="Phone">
+  <button onclick="trackOrder()">Track</button>
+  <div id="result"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
