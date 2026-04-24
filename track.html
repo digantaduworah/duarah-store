@@ -1,36 +1,98 @@
-<input id="phone" placeholder="Enter phone">
-<button onclick="track()">Track</button>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Track Order</title>
 
-<div id="result"></div>
-<h2>Track Your Order</h2>
+  <style>
+    body{
+      font-family: Arial;
+      background:#f5f7fb;
+      padding:20px;
+    }
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      max-width:400px;
+      margin:auto;
+    }
+    input, button{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+    }
+    button{
+      background:#007bff;
+      color:white;
+      border:none;
+      border-radius:8px;
+    }
+  </style>
+</head>
 
-<input id="phone" placeholder="Enter phone number">
-<button onclick="track()">Track</button>
+<body>
 
-<div id="result"></div>
+<div class="card">
+
+  <h2>Track Your Order</h2>
+
+  <input id="phone" placeholder="Enter phone number">
+  <button onclick="track()">Track</button>
+
+  <div id="result" style="margin-top:15px;"></div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script src="firebase.js"></script>
+
 <script>
 function track(){
 
   let phone = document.getElementById("phone").value;
 
+  if(phone.length < 10){
+    alert("Enter valid phone number");
+    return;
+  }
+
   db.collection("bookings")
   .where("phone","==",phone)
   .get()
   .then(snap=>{
+
     let html="";
 
-    snap.forEach(doc=>{
-      let d = doc.data();
+    if(snap.empty){
+      html = "<b>No orders found</b>";
+    } else {
 
-      html += `
-      <div>
-        ${d.service} - ₹${d.amount} - ${d.status}
-      </div>`;
-    });
+      snap.forEach(doc=>{
+        let d = doc.data();
+
+        let color = d.status === "Pending" ? "orange" :
+                    d.status === "Processing" ? "blue" : "green";
+
+        html += `
+        <div style="border:1px solid ${color}; padding:10px; margin:10px; border-radius:10px;">
+          <b>${d.service}</b><br>
+          Order ID: ${d.orderId}<br>
+          Amount: ₹${d.amount}<br>
+          Status: <span style="color:${color}">${d.status}</span>
+        </div>
+        `;
+      });
+
+    }
 
     document.getElementById("result").innerHTML = html;
+
   });
 }
 </script>
+
+</body>
+</html>
