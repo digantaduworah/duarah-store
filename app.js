@@ -52,21 +52,23 @@ function loadSubService(){
 // 🎛 UI CONTROL
 function handleServiceChange(){
 
-  let service = document.getElementById("service")?.value;
+  let service = document.getElementById("service").value;
 
-  let qtyBox = document.getElementById("qtyBox");
-  let ebillBox = document.getElementById("ebillBox");
-
-  if(qtyBox) qtyBox.style.display = "none";
-  if(ebillBox) ebillBox.style.display = "none";
-
+  // Show quantity for print
   if(service === "Print B/W" || service === "Print Color"){
-    if(qtyBox) qtyBox.style.display = "block";
+    document.getElementById("qtyBox").style.display = "block";
+  } else {
+    document.getElementById("qtyBox").style.display = "none";
   }
 
+  // Show electricity dropdown
   if(service === "Electricity Bill"){
-    if(ebillBox) ebillBox.style.display = "block";
+    document.getElementById("ebillBox").style.display = "block";
+  } else {
+    document.getElementById("ebillBox").style.display = "none";
   }
+
+  calculateBill();
 }
 
 // 💰 Price list
