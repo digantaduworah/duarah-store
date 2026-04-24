@@ -77,7 +77,18 @@ const priceList = {
   "PAN Card": 300,
   "Voter Card": 200
 };
+// Show QR
+function showQR(){
 
+  let total = document.getElementById("total").innerText;
+
+  if(total == 0){
+    alert("Please select service first");
+    return;
+  }
+
+  document.getElementById("qrBox").style.display = "block";
+}
 // 💵 BILL
 function calculateBill(){
 
