@@ -5,20 +5,22 @@ const langData = {
     submit: "Submit Order"
   },
   as: {
-    title: "দুৱাৰা ষ্ট’ৰ",
+    title: "দুৱৰা ষ্ট’ৰ",
     submit: "অৰ্ডাৰ কৰক"
   }
 };
 
 function setLang(lang){
-  document.getElementById("title").innerText = langData[lang].title;
-  document.getElementById("submitBtn").innerText = langData[lang].submit;
+  document.getElementById("title")?.innerText = langData[lang].title;
+  document.getElementById("submitBtn")?.innerText = langData[lang].submit;
 }
 
 // 📦 Service Load
 function loadServices(){
-  let cat = document.getElementById("category").value;
+  let cat = document.getElementById("category")?.value;
   let service = document.getElementById("service");
+
+  if(!service) return;
 
   if(cat === "Online Apply"){
     service.innerHTML = `
@@ -32,8 +34,10 @@ function loadServices(){
 
 // 📂 Sub Service
 function loadSubService(){
-  let s = document.getElementById("service").value;
+  let s = document.getElementById("service")?.value;
   let sub = document.getElementById("subService");
+
+  if(!sub) return;
 
   if(s === "PAN Card" || s === "Voter Card"){
     sub.innerHTML = `
@@ -45,9 +49,24 @@ function loadSubService(){
   }
 }
 
-// 📤 Upload box show
-function handleService(){
-  document.getElementById("uploadBox").style.display = "block";
+// 🎛 UI CONTROL
+function handleServiceChange(){
+
+  let service = document.getElementById("service")?.value;
+
+  let qtyBox = document.getElementById("qtyBox");
+  let ebillBox = document.getElementById("ebillBox");
+
+  if(qtyBox) qtyBox.style.display = "none";
+  if(ebillBox) ebillBox.style.display = "none";
+
+  if(service === "Print B/W" || service === "Print Color"){
+    if(qtyBox) qtyBox.style.display = "block";
+  }
+
+  if(service === "Electricity Bill"){
+    if(ebillBox) ebillBox.style.display = "block";
+  }
 }
 
 // 💰 Price list
@@ -59,54 +78,44 @@ const priceList = {
   "Voter Card": 200
 };
 
-// 💵 BILL CALCULATION (FINAL MERGED VERSION)
+// 💵 BILL
 function calculateBill(){
 
-  let service = document.getElementById("service").value;
-  let sub = document.getElementById("subService").value;
+  let service = document.getElementById("service")?.value;
+  let sub = document.getElementById("subService")?.value;
   let qty = parseInt(document.getElementById("qty")?.value) || 1;
 
   let total = 0;
 
-  // PAN
   if(service === "PAN Card"){
     total = (sub === "Correction") ? 250 : 300;
   }
-
-  // Voter
   else if(service === "Voter Card"){
     total = (sub === "Correction") ? 150 : 200;
   }
-
-  // Electricity
   else if(service === "Electricity Bill"){
     let bill = parseInt(document.getElementById("ebillAmount")?.value) || 0;
     total = bill + 30;
   }
-
-  // Print / Scan
   else if(service === "Print B/W" || service === "Print Color" || service === "Scan"){
-    let price = priceList[service] || 0;
-    total = price * qty;
+    total = (priceList[service] || 0) * qty;
   }
-
-  // Default
-  else {
+  else{
     total = priceList[service] || 0;
   }
 
-  document.getElementById("total").innerText = total;
+  document.getElementById("total")?.innerText = total;
 }
 
-// 📤 SUBMIT ORDER
+// 📤 SUBMIT
 function submitOrder(){
 
-  let phone = document.getElementById("phone").value;
-  let service = document.getElementById("service").value;
-  let subService = document.getElementById("subService").value;
-  let amount = document.getElementById("total").innerText;
+  let phone = document.getElementById("phone")?.value;
+  let service = document.getElementById("service")?.value;
+  let subService = document.getElementById("subService")?.value;
+  let amount = document.getElementById("total")?.innerText;
 
-  if(phone.length < 10){
+  if(!phone || phone.length < 10){
     alert("Enter valid phone");
     return;
   }
@@ -124,12 +133,21 @@ function submitOrder(){
   });
 
   alert("Order Submitted");
+
+  // 🔄 RESET
+  document.getElementById("phone").value = "";
+  document.getElementById("total").innerText = "0";
 }
 
-// 🔍 TRACK ORDER
+// 🔍 TRACK
 function track(){
 
-  let phone = document.getElementById("phone").value;
+  let phone = document.getElementById("trackPhone")?.value;
+
+  if(!phone || phone.length < 10){
+    alert("Enter valid phone");
+    return;
+  }
 
   db.collection("bookings").where("phone","==",phone)
   .get().then(snap=>{
@@ -137,11 +155,21 @@ function track(){
     let html="";
 
     if(snap.empty){
-      html = "No orders found";
+      html = "<b>No orders found</b>";
     } else {
       snap.forEach(doc=>{
         let d = doc.data();
-        html += `${d.service} - ₹${d.amount} - ${d.status}<br>`;
+
+        let color = d.status === "Pending" ? "orange" :
+                    d.status === "Processing" ? "blue" : "green";
+
+        html += `
+        <div style="border:1px solid ${color}; padding:10px; margin:10px; border-radius:10px;">
+          <b>${d.service}</b><br>
+          Order ID: ${d.orderId}<br>
+          Amount: ₹${d.amount}<br>
+          Status: <span style="color:${color}">${d.status}</span>
+        </div>`;
       });
     }
 
@@ -155,6 +183,7 @@ let soundEnabled = false;
 
 function enableSound(){
   soundEnabled = true;
+  alert("Sound Enabled");
 }
 
 db.collection("bookings").onSnapshot(snap=>{
@@ -164,7 +193,7 @@ db.collection("bookings").onSnapshot(snap=>{
   lastCount = snap.size;
 });
 
-// 🧾 PRINT BILL
+// 🧾 PRINT
 function printBill(id, service, amount){
 
   let w = window.open("");
