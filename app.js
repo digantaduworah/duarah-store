@@ -50,17 +50,22 @@ function loadSubService(){
 }
 
 // 🎛 UI CONTROL
-function handleServiceChange(){
-
+function handleServiceChange() {
   let service = document.getElementById("service").value;
 
-  // Show quantity for print
-  if(service === "Print B/W" || service === "Print Color"){
+  document.getElementById("qtyBox").style.display = "none";
+  document.getElementById("ebillBox").style.display = "none";
+
+  if (service === "Print B/W" || service === "Print Color") {
     document.getElementById("qtyBox").style.display = "block";
-  } else {
-    document.getElementById("qtyBox").style.display = "none";
   }
 
+  if (service === "Electricity Bill") {
+    document.getElementById("ebillBox").style.display = "block";
+  }
+
+  calculateBill();
+}
   // Show electricity dropdown
   if(service === "Electricity Bill"){
     document.getElementById("ebillBox").style.display = "block";
