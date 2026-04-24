@@ -40,3 +40,10 @@ button:hover {
   background: #0056b3;
   cursor: pointer;
 }
+.card {
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
