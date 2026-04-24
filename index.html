@@ -1,18 +1,43 @@
-<script>
-location = "app.html";
-</script>
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
+  <title>Duarah Store</title>
+
+  <style>
+    body{
+      font-family: Arial;
+      background:#f5f7fb;
+      text-align:center;
+      padding:30px;
+    }
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      max-width:300px;
+      margin:auto;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
+    button{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border:none;
+      border-radius:8px;
+      background:#007bff;
+      color:white;
+      font-size:16px;
+    }
+  </style>
 </head>
+
 <body>
 
 <div class="card">
   <h2>Welcome to Duarah Store</h2>
 
   <a href="app.html"><button>📦 Place Order</button></a>
-  <a href="track.html"><button>🔍 Track Order</button></a>
+  <a href="app.html#track"><button>🔍 Track Order</button></a>
   <a href="admin.html"><button>🛠 Admin Panel</button></a>
 </div>
 
