@@ -2,3 +2,35 @@
 <button onclick="track()">Track</button>
 
 <div id="result"></div>
+<h2>Track Your Order</h2>
+
+<input id="phone" placeholder="Enter phone number">
+<button onclick="track()">Track</button>
+
+<div id="result"></div>
+
+<script src="firebase.js"></script>
+<script>
+function track(){
+
+  let phone = document.getElementById("phone").value;
+
+  db.collection("bookings")
+  .where("phone","==",phone)
+  .get()
+  .then(snap=>{
+    let html="";
+
+    snap.forEach(doc=>{
+      let d = doc.data();
+
+      html += `
+      <div>
+        ${d.service} - ₹${d.amount} - ${d.status}
+      </div>`;
+    });
+
+    document.getElementById("result").innerHTML = html;
+  });
+}
+</script>
