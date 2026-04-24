@@ -88,3 +88,22 @@ function submitOrder(){
 
   alert("Order Submitted");
 }
+function track(){
+
+  let phone = document.getElementById("phone").value;
+
+  db.collection("bookings").where("phone","==",phone)
+  .get().then(snap=>{
+
+    let html="";
+
+    snap.forEach(doc=>{
+      let d = doc.data();
+
+      html += `${d.service} - ₹${d.amount} - ${d.status}<br>`;
+    });
+
+    document.getElementById("result").innerHTML = html;
+  });
+
+}
