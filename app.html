@@ -1,46 +1,67 @@
-<button onclick="enableSound()">Enable Sound</button>
-<select onchange="setLang(this.value)">
-  <option value="en">English</option>
-  <option value="as">Assamese</option>
-</select>
-<div class="card">
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Track Your Order</h2>
+
+<input id="phone" placeholder="Enter phone number"><br><br>
+<button onclick="track()">Track</button>
+
+<div id="result" style="margin-top:15px;"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
 <script src="firebase.js"></script>
-<script src="app.js"></script>
-<h3>Select Category</h3>
 
-<select id="category" onchange="loadServices()">
-  <option value="">Select</option>
-  <option>Online Apply</option>
-  <option>Recharge</option>
-  <option>Print</option>
-</select>
+<script>
+function track(){
 
-<select id="service" onchange="loadSubService()"></select>
+  let phone = document.getElementById("phone").value;
 
-<select id="subService" onchange="handleService()"></select>
+  if(phone.length < 10){
+    alert("Enter valid phone number");
+    return;
+  }
 
-  <select id="subService" onchange="calculateBill()"></select>
-</div>
-<div id="uploadBox" style="display:none;">
-  <h4>Upload Documents</h4>
-  <input type="file" id="doc1">
-  <input type="file" id="doc2">
-</div>
-<select id="service" onchange="handleServiceChange()">
-  <option value="">Select Service</option>
-  <option>Electricity Bill</option>
-  <option>Print B/W</option>
-  <option>Print Color</option>
-  <option>PAN Card Apply</option>
-</select>
-<div id="ebillBox" style="display:none;">
-  <h4>Select Bill Amount</h4>
+  db.collection("bookings")
+  .where("phone","==",phone)
+  .get()
+  .then(snap=>{
 
-  <select id="ebillAmount" onchange="calculateBill()">
-    <option value="100">₹100</option>
-    <option value="200">₹200</option>
-    <option value="300">₹300</option>
-    <option value="400">₹400</option>
-    <option value="500">₹500</option>
-  </select>
-</div>
+    let html="";
+
+    if(snap.empty){
+      html = "<b>No orders found</b>";
+    } else {
+
+      snap.forEach(doc=>{
+        let d = doc.data();
+
+        let color = d.status === "Pending" ? "orange" :
+                    d.status === "Processing" ? "blue" : "green";
+
+        html += `
+        <div style="border:1px solid ${color}; padding:10px; margin:10px; border-radius:10px;">
+          <b>${d.service}</b><br>
+          Order ID: ${d.orderId}<br>
+          Amount: ₹${d.amount}<br>
+          Status: <span style="color:${color}">${d.status}</span>
+        </div>
+        `;
+      });
+
+    }
+
+    document.getElementById("result").innerHTML = html;
+
+  })
+  .catch(err=>{
+    alert(err.message);
+  });
+}
+</script>
+
+</body>
+</html>
