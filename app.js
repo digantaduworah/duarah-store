@@ -1,40 +1,15 @@
-let currentOrderId = "";
-let selectedService = "";
-
-function book(service){
-  selectedService = service;
-  currentOrderId = "DS" + Date.now();
-
-  document.getElementById("paymentBox").style.display="block";
-}
-
-function uploadAndConfirm(){
-
-  let file = document.getElementById("paymentProof").files[0];
-
-  if(!file){
-    alert("Upload screenshot");
-    return;
+const langData = {
+  en: {
+    title: "Duarah Store",
+    submit: "Submit Order"
+  },
+  as: {
+    title: "দুৱৰা ষ্ট’ৰ",
+    submit: "অৰ্ডাৰ কৰক"
   }
+};
 
-  let ref = storage.ref("payments/"+currentOrderId+".jpg");
-
-  ref.put(file).then(()=>{
-
-    ref.getDownloadURL().then(url=>{
-
-      db.collection("bookings").add({
-        orderId: currentOrderId,
-        service: selectedService,
-        screenshot: url,
-        status:"Pending",
-        time:new Date()
-      });
-
-      alert("Order Submitted");
-
-    });
-
-  });
-
+function setLang(lang){
+  document.getElementById("title").innerText = langData[lang].title;
+  document.getElementById("submitBtn").innerText = langData[lang].submit;
 }
