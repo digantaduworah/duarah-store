@@ -27,5 +27,21 @@ function loadServices(){
       <option>Non Creamy Layer</option>
     `;
   }
+function loadSubService(){
 
+  let s = document.getElementById("service").value;
+
+  let sub = document.getElementById("subService");
+
+  if(s === "PAN Card" || s === "Voter Card"){
+    sub.innerHTML = `
+      <option value="">Select Option</option>
+      <option>New Apply</option>
+      <option>Correction</option>
+    `;
+  } else {
+    sub.innerHTML = "";
+  }
+
+}
 }
