@@ -115,3 +115,47 @@ db.collection("bookings").onSnapshot(snap=>{
   }
   last = snap.size;
 });
+const priceList = {
+  "Print B/W": 5,
+  "Print Color": 10,
+  "Scan": 5,
+
+  "PAN Card Apply": 300,
+  "Passport Apply": 200,
+  "Electricity Bill": 30
+};
+  <input type="number" id="qty" placeholder="Enter pages" value="1" oninput="calculateBill()">
+    <h3>Total Amount: ₹ <span id="total">0</span></h3>
+    function calculateBill(){
+
+  let service = document.getElementById("service").value;
+  let qty = parseInt(document.getElementById("qty").value) || 1;
+
+  let price = priceList[service] || 0;
+
+  // 👉 Only apply quantity for print/scan
+  if(service === "Print B/W" || service === "Print Color" || service === "Scan"){
+    document.getElementById("total").innerText = price * qty;
+  } else {
+    document.getElementById("total").innerText = price;
+    document.getElementById("qty").value = 1; // reset
+  }
+
+}
+  let qty = parseInt(document.getElementById("qty").value) || 1;
+let price = priceList[service] || 0;
+
+let amount = (service === "Print B/W" || service === "Print Color" || service === "Scan")
+  ? price * qty
+  : price;
+
+db.collection("bookings").add({
+  orderId: orderId,
+  phone: phone,
+  service: service,
+  qty: qty,
+  amount: amount,
+  screenshot: url,
+  status: "Pending",
+  time: new Date()
+});
